@@ -1,0 +1,46 @@
+<?php
+
+//$link = mysql_connect('localhost', 'root', '') or die('Cannot connect to the DB');
+//mysql_select_db('projectolshop', $link) or die('Cannot select the DB');
+require('koneksi.php');
+
+if (!empty($_POST)) {
+$no = getNo();	
+$nama_owner =$_POST['nama_owner']; 						
+$nama_toko =$_POST['nama_toko']; 						
+$email =$_POST['email_owner']; 						
+$telp=$_POST['telp_owner']; 						
+$alamat=$_POST['alamat']; 						
+$ket=$_POST['keterangan']; 						
+$password=$_POST['password']; 						
+						
+$sql = "insert into tb_owner(id_owner,nama_owner,nama_toko,email_owner,telp_owner,alamat_owner,keterangan,password) 
+values('$no','$nama_owner','$nama_toko','$email','$telp','$alamat','$ket','$password')";
+$result = mysql_query($sql) or die("error di ".mysql_error());
+
+if($result){
+	$status["status"] ="berhasil";
+	}else{
+	$status["status"] ="gagal";
+	}
+		
+}else {
+	$status["status"] ="gagal";
+}
+echo json_encode($status);
+
+function getNo(){	
+
+$query = "SELECT MAX(id_owner) as kodex  FROM  tb_owner";
+$hasil = mysql_query($query);
+$data  = mysql_fetch_array($hasil);
+$kode = $data['kodex'];
+
+	 
+	$nourut = substr($kode, 3, 4); 
+	$nourut++; 
+	$nextid = "IO".sprintf("%04s",$nourut);
+	return $nextid;
+}
+
+?>
